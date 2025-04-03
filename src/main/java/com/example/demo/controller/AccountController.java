@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.model.Account;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AccountController {
@@ -21,7 +21,7 @@ public class AccountController {
 	Account account;
 
 	// ログイン画面を表示
-	@GetMapping({ "/", "/login", "/logout" })
+	@GetMapping({ "/login", "/logout" })
 	public String index(
 			@RequestParam(name = "error", defaultValue = "") String error,
 			Model model) {
@@ -52,4 +52,12 @@ public class AccountController {
 		// 「/items」へのリダイレクト
 		return "redirect:/items";
 	}
+	
+	// 会員登録画面表示
+	@GetMapping("/account")
+	public String create() {
+		// 画面遷移
+		return "accountForm";
+	}
+	
 }
