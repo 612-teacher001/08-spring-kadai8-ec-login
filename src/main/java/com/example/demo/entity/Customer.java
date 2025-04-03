@@ -20,16 +20,19 @@ public class Customer {
 	private String tel; // 電話番号
 
 	private String email; // メールアドレス
+	
+	private String password; // パスワード
 
 	// コンストラクタ
 	public Customer() {
 	}
 
-	public Customer(String name, String address, String tel, String email) {
+	public Customer(String name, String address, String tel, String email, String password) {
 		this.name = name;
 		this.address = address;
 		this.tel = tel;
 		this.email = email;
+		this.password = password;
 	}
 
 	// ゲッター
@@ -51,5 +54,13 @@ public class Customer {
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public String getPassword() {
+		return this.password;
 	}
 }

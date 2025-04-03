@@ -51,7 +51,7 @@ public class OrderController {
 			Model model) {
 
 		// お客様情報をまとめる
-		Customer customer = new Customer(name, address, tel, email);
+		Customer customer = new Customer(name, address, tel, email, "");
 		model.addAttribute("customer", customer);
 
 		return "orderConfirm";
@@ -67,7 +67,7 @@ public class OrderController {
 			Model model) {
 
 		// 1. お客様情報をDBに格納する
-		Customer customer = new Customer(name, address, tel, email);
+		Customer customer = new Customer(name, address, tel, email, "");
 		customerRepository.save(customer);
 
 		// 2. 注文情報をDBに格納する
