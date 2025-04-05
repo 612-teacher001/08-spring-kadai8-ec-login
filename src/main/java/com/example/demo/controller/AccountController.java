@@ -18,6 +18,7 @@ import com.example.demo.model.Account;
 import com.example.demo.repository.CustomerRepository;
 
 
+
 @Controller
 public class AccountController {
 
@@ -45,24 +46,6 @@ public class AccountController {
 		return "login";
 	}
 
-	// ログインを実行
-	@PostMapping("/login")
-	public String login(
-			@RequestParam("name") String name,
-			Model model) {
-		// 名前が空の場合にエラーとする
-		if (name == null || name.length() == 0) {
-			model.addAttribute("message", "名前を入力してください");
-			return "login";
-		}
-
-		// セッション管理されたアカウント情報に名前をセット
-		account.setName(name);
-
-		// 「/items」へのリダイレクト
-		return "redirect:/items";
-	}
-	
 	// 会員登録画面表示
 	@GetMapping("/account")
 	public String create(Model model) {
@@ -122,6 +105,27 @@ public class AccountController {
 		customerRepository.save(customer);
 		// 画面遷移
 		return "redirect:/login";
+	}
+	
+	// ログイン処理
+	@PostMapping("/login")
+	public String login(@RequestParam String email,
+						@RequestParam String password,
+						Model model) {
+		// リクエストパラメータをもとにくcustomersテーブルから顧客クラスを取得
+		Optional<Customer> customerOpt = customerRepository.findByEmailAndPassword(email, password);
+		
+		if (customerOpt.isPresent()) {
+			// 顧客インスタンスを取得できた場合 ⇒ ユーザ認証に成功した場合：アカウントインスタンスに名前を設定
+			Customer customer = customerOpt.get();
+			account.setName(customer.getName());
+		} else {
+			model.addAttribute("error", "メールアドレスとパスワードが一致しませんでした");
+			return "login";
+		}
+		
+		// 画面遷移
+		return "redirect:/items";
 	}
 	
 	
