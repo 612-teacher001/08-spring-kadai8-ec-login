@@ -118,6 +118,7 @@ public class AccountController {
 		if (customerOpt.isPresent()) {
 			// 顧客インスタンスを取得できた場合 ⇒ ユーザ認証に成功した場合：アカウントインスタンスに名前を設定
 			Customer customer = customerOpt.get();
+			account.setId(customer.getId());
 			account.setName(customer.getName());
 		} else {
 			model.addAttribute("error", "メールアドレスとパスワードが一致しませんでした");
