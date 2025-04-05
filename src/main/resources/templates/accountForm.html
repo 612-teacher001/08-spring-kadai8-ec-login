@@ -4,42 +4,51 @@
 <meta charset="UTF-8">
 <title>ログイン</title>
 <link rel="stylesheet" type="text/css" href="/css/style.css">
+<style>
+	.error-list {
+		color: tomato;
+		list-style-type: none;
+	}
+</style>
 </head>
 <body>
 	<header>
 		<h1>サンプルショッピング</h1>
 	</header>
 	<main>
+		<ul class="error-list" th:if="${errors}">
+			<li th:each="error:${errors}" th:text="${error}"></li>
+		</ul>
 		<form action="/account" method="post">
 		<table>
 			<tr>
 				<th>お名前</th>
 				<td>
-					<input type="text" name="name" value="田中太郎"/>
+					<input type="text" name="name" th:value="${customer.name}"/>
 				</td>
 			</tr>
 			<tr>
 				<th>住所</th>
 				<td>
-					<input type="text" name="address" value="東京都新宿区" />
+					<input type="text" name="address" th:value="${customer.address}" />
 				</td>
 			</tr>
 			<tr>
 				<th>電話番号</th>
 				<td>
-					<input type="text" name="phone" value="090-1111-1111" />
+					<input type="text" name="phone" th:value="${customer.tel}" />
 				</td>
 			</tr>
 			<tr>
 				<th>e-mail</th>
 				<td>
-					<input type="text" name="email" value="tanaka@aaa.com"
+					<input type="text" name="email" th:value="${customer.email}">
 				</td>
 			</tr>
 			<tr>
 				<th>パスワード</th>
 				<td>
-					<input type="text" name="password" value="himitu" /><!-- type属性は確認しやすいように「text」のままにした -->
+					<input type="text" name="password" th:value="${customer.password}" /><!-- type属性は確認しやすいように「text」のままにした -->
 				</td>
 			</tr>
 		</table>

@@ -1,5 +1,9 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +65,9 @@ public class AccountController {
 	
 	// 会員登録画面表示
 	@GetMapping("/account")
-	public String create() {
+	public String create(Model model) {
+		// スコープに登録
+		model.addAttribute("customer", new Customer());
 		// 画面遷移
 		return "accountForm";
 	}
@@ -72,9 +78,46 @@ public class AccountController {
 						@RequestParam(defaultValue = "") String address,
 						@RequestParam(defaultValue = "") String phone,
 						@RequestParam(defaultValue = "") String email,
-						@RequestParam(defaultValue = "") String password) {
+						@RequestParam(defaultValue = "") String password,
+						Model model) {
+		// 入力値チェック
+		List<String> errorList = new ArrayList<String>();
+		if (name.isEmpty()) {
+			// 名前必須入力エラー
+			errorList.add("名前は必須です");
+		}
+		if (address.isEmpty()) {
+			// 住所必須入力エラー
+			errorList.add("住所は必須です");
+		}
+		if (phone.isEmpty()) {
+			// 電話番号必須入力エラー
+			errorList.add("電話番号は必須です");
+		}
+		if (email.isEmpty()) {
+			// メールアドレス必須入力エラー
+			errorList.add("メールアドレスは必須です");
+		} else {
+			// Optionalの説明：
+			Optional<Customer> exsists = customerRepository.findByEmail(email);
+			if (exsists.isPresent()) {
+				errorList.add("登録済みのメールアドレスです");
+			}
+		}
+		if (password.isEmpty()) {
+			// パスワード必須入力エラー
+			errorList.add("パスワードは必須です");
+		}
 		// リクエストパラメータをもとにして顧客クラスをインスタンス化
 		Customer customer = new Customer(name, address, phone, email, password);
+		
+		// エラーがある場合
+		if (errorList.size() > 0) {
+			model.addAttribute("customer", customer);
+			model.addAttribute("errors", errorList);
+			return "accountForm";
+		}
+		
 		// 顧客インスタンスをcustomersテーブルに登録
 		customerRepository.save(customer);
 		// 画面遷移
